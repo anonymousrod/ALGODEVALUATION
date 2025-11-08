@@ -1,40 +1,40 @@
-# ALGODEVALUATION - Collecte de Données d'Agences Immobilières
+# ALGODEVALUATION
 
-## Description
+ALGODEVALUATION est une plateforme web Laravel conçue pour collecter et gérer les données des agences immobilières. Elle permet aux contributeurs de soumettre des informations sur les agences immobilières, qui sont ensuite validées par les administrateurs pour enrichir une base de données fiable.
 
-ALGODEVALUATION est une plateforme web développée avec Laravel permettant la collecte collaborative de données d'agences immobilières. Les utilisateurs peuvent soumettre des informations sur les agences immobilières, qui sont ensuite validées par des administrateurs. Le système inclut un algorithme de matching pour détecter les doublons et une interface d'administration complète.
+## Fonctionnalités
 
 ### Pour les Contributeurs
-- Soumission d'informations d'agences immobilières (nom, email, téléphone, siège)
-- Possibilité de contribuer de manière anonyme ou avec coordonnées
-- Soumission multiple d'agences en une seule fois
-- Algorithme de matching automatique pour éviter les doublons
+- **Soumission d'Agences** : Formulaire intuitif pour soumettre plusieurs agences immobilières
+- **Anonymat Optionnel** : Possibilité de contribuer de manière anonyme ou avec un pseudo
+- **Validation des Données** : Chaque soumission est examinée par les administrateurs
+- **Récompenses** : Système de récompenses pour les contributions validées
 
 ### Pour les Administrateurs
-- Tableau de bord avec statistiques générales
-- Gestion des soumissions (approbation/rejet)
-- Validation automatique des agences approuvées
-- Gestion des agences et contributeurs
-- Exports CSV et PDF
-- Authentification sécurisée
+- **Tableau de Bord** : Vue d'ensemble des statistiques (soumissions, agences, contributeurs)
+- **Gestion des Soumissions** : Validation ou rejet des soumissions avec historique
+- **Gestion des Agences** : Liste des agences validées avec informations complètes
+- **Gestion des Contributeurs** : Suivi des contributions et statistiques par contributeur
+- **Exports** : Export des données en CSV et PDF pour agences, contributeurs et soumissions
+- **Authentification Sécurisée** : Système d'authentification dédié aux administrateurs
 
 ## Technologies Utilisées
 
-- **Backend**: Laravel 12
-- **Base de données**: MySQL/SQLite
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **PDF Generation**: DomPDF
-- **Authentification**: Laravel Sanctum (pour admin)
+- **Backend** : Laravel 12.0 (PHP 8.2+)
+- **Frontend** : HTML5, CSS3, JavaScript (avec Vite pour le build)
+- **Base de Données** : MySQL/SQLite (configurable)
+- **Authentification** : Laravel Sanctum
+- **Exports PDF** : DomPDF
+- **UI/UX** : Design responsive avec animations CSS
 
-## Installation
+## Prérequis
 
-### Prérequis
 - PHP 8.2 ou supérieur
 - Composer
 - Node.js et npm
 - MySQL ou SQLite
 
-### Étapes d'installation
+## Installation
 
 1. **Cloner le repository**
    ```bash
@@ -58,19 +58,28 @@ ALGODEVALUATION est une plateforme web développée avec Laravel permettant la c
    php artisan key:generate
    ```
 
-5. **Configuration de la base de données**
-   - Modifier le fichier `.env` avec vos paramètres de base de données
-   - Exécuter les migrations :
-   ```bash
-   php artisan migrate
+   Configurer la base de données dans `.env` :
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=algodevaluation
+   DB_USERNAME=votre_username
+   DB_PASSWORD=votre_password
    ```
 
-6. **Seeder la base de données (optionnel)**
+5. **Migration et seeding de la base de données**
    ```bash
+   php artisan migrate
    php artisan db:seed
    ```
 
-7. **Compiler les assets**
+6. **Lier le stockage**
+   ```bash
+   php artisan storage:link
+   ```
+
+7. **Build des assets**
    ```bash
    npm run build
    ```
@@ -80,7 +89,7 @@ ALGODEVALUATION est une plateforme web développée avec Laravel permettant la c
    php artisan serve
    ```
 
-   Ou utiliser le script de développement fourni :
+   Pour le développement avec hot reload :
    ```bash
    composer run dev
    ```
@@ -88,134 +97,156 @@ ALGODEVALUATION est une plateforme web développée avec Laravel permettant la c
 ## Utilisation
 
 ### Accès Public
-- **Page d'accueil**: `/`
-- **Soumission d'agences**: `/submit`
-- **Connexion admin**: `/login`
+- **Page d'accueil** : `/` - Présentation du projet et lien vers le formulaire de soumission
+- **Formulaire de soumission** : `/submit` - Soumission d'agences immobilières
 
 ### Accès Administrateur
-- **Tableau de bord**: `/admin`
-- **Soumissions**: `/admin/submissions`
-- **Agences**: `/admin/agencies`
-- **Contributeurs**: `/admin/contributors`
+- **Connexion** : `/login` - Authentification administrateur
+- **Tableau de bord** : `/admin` - Vue d'ensemble et statistiques
+- **Soumissions** : `/admin/submissions` - Gestion des soumissions
+- **Agences** : `/admin/agencies` - Liste des agences validées
+- **Contributeurs** : `/admin/contributors` - Gestion des contributeurs
+- **Exports** : Fonctionnalités d'export disponibles sur chaque section
 
-### API
-- **Soumission d'agences**: `POST /api/submit`
+## Structure du Projet
 
-## Structure de la Base de Données
+```
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── AdminController.php      # Gestion admin
+│   │   ├── ApiController.php        # API pour soumissions
+│   │   └── AuthController.php       # Authentification
+│   └── Models/
+│       ├── Agency.php               # Modèle Agence
+│       ├── Contributor.php          # Modèle Contributeur
+│       ├── Submission.php           # Modèle Soumission
+│       └── User.php                 # Modèle Utilisateur
+├── database/migrations/             # Migrations base de données
+├── public/                          # Assets publics
+├── resources/
+│   ├── css/                         # Styles CSS
+│   ├── js/                          # JavaScript
+│   └── views/                       # Templates Blade
+│       ├── admin/                   # Vues admin
+│       ├── auth/                    # Vues authentification
+│       ├── submit.blade.php         # Formulaire soumission
+│       └── welcome.blade.php        # Page d'accueil
+├── routes/
+│   ├── api.php                      # Routes API
+│   └── web.php                      # Routes web
+└── tests/                           # Tests unitaires et fonctionnels
+```
 
-### Tables Principales
+## API
 
-#### `contributors`
-- `id`: Identifiant unique
-- `pseudo`: Pseudo du contributeur (nullable)
-- `phone`: Numéro de téléphone (nullable)
-- `is_anonymous`: Indicateur d'anonymat
-- `contributions_count`: Nombre total de contributions
-
-#### `agencies`
-- `id`: Identifiant unique
-- `name`: Nom de l'agence
-- `email`: Email de l'agence (nullable)
-- `phone`: Téléphone de l'agence (nullable)
-- `siege`: Adresse du siège (nullable)
-- `canonical`: Indicateur d'agence validée
-
-#### `submissions`
-- `id`: Identifiant unique
-- `contributor_id`: Référence au contributeur
-- `agency_name`: Nom soumis
-- `agency_email`: Email soumis (nullable)
-- `agency_phone`: Téléphone soumis (nullable)
-- `agency_siege`: Siège soumis (nullable)
-- `matched_agency_id`: Référence à l'agence correspondante (nullable)
-- `match_score`: Score de correspondance (0-100)
-- `internet_check`: Statut de vérification internet
-- `is_flagged`: Indicateur de signalement
-- `status`: Statut (pending/approved/rejected)
-- `validated_at`: Date de validation (nullable)
-- `validated_by`: Référence à l'administrateur validateur
-
-## Algorithme de Matching
-
-L'algorithme compare les nouvelles soumissions avec les agences existantes en utilisant :
-- **Similarité de nom** (70% du score)
-- **Correspondance téléphone** (20% du score)
-- **Correspondance email** (10% du score)
-
-Un score > 70 déclenche un signalement automatique pour vérification manuelle.
-
-## Exports
-
-### Formats supportés
-- **CSV**: Export simple des données
-- **PDF**: Rapport formaté avec DomPDF
-
-### Endpoints d'export
-- `/admin/export/agencies` (CSV)
-- `/admin/export/agencies/pdf` (PDF)
-- `/admin/export/contributors` (CSV)
-- `/admin/export/contributors/pdf` (PDF)
-- `/admin/export/submissions` (CSV)
-- `/admin/export/submissions/pdf` (PDF)
-
-## Sécurité
-
-- Authentification Laravel pour l'accès admin
-- Protection CSRF sur tous les formulaires
-- Validation des données côté serveur
-- Sanitisation des entrées utilisateur
+### Endpoint de Soumission
+- **URL** : `/api/submit`
+- **Méthode** : POST
+- **Body** :
+  ```json
+  {
+    "anonymous": false,
+    "pseudo": "contributeur123",
+    "phone": "+33123456789",
+    "agencies": [
+      {
+        "name": "Agence Immobilière Example",
+        "email": "contact@example.com",
+        "phone": "+33123456789",
+        "siege": "123 Rue de la République, 75001 Paris"
+      }
+    ]
+  }
+  ```
 
 ## Développement
 
-### Scripts disponibles
+### Scripts Disponibles
 ```bash
 # Développement avec rechargement automatique
 composer run dev
 
 # Tests
-composer run test
+php artisan test
 
 # Analyse du code
 ./vendor/bin/pint
+
+# Génération de documentation (si applicable)
+php artisan ide-helper:generate
 ```
 
-### Structure du projet
-```
-├── app/
-│   ├── Http/Controllers/
-│   │   ├── AdminController.php
-│   │   ├── Api/
-│   │   │   └── SubmissionController.php
-│   │   └── AuthController.php
-│   └── Models/
-│       ├── Agency.php
-│       ├── Contributor.php
-│       ├── Submission.php
-│       └── User.php
-├── database/migrations/
-├── resources/views/
-│   ├── admin/
-│   ├── auth/
-│   ├── submit.blade.php
-│   └── welcome.blade.php
-├── routes/
-│   ├── api.php
-│   └── web.php
-└── public/assets/
-```
+### Variables d'Environnement
+Principales variables à configurer dans `.env` :
+- `APP_NAME` : Nom de l'application
+- `APP_URL` : URL de base
+- `DB_*` : Configuration base de données
+- `MAIL_*` : Configuration email (optionnel)
+
+## Déploiement
+
+### Préparation pour la Production
+1. Optimiser l'autoloader :
+   ```bash
+   composer install --optimize-autoloader --no-dev
+   ```
+
+2. Générer les assets optimisés :
+   ```bash
+   npm run build
+   ```
+
+3. Configurer les permissions :
+   ```bash
+   chown -R www-data:www-data storage bootstrap/cache
+   chmod -R 775 storage bootstrap/cache
+   ```
+
+4. Configurer le cache :
+   ```bash
+   php artisan config:cache
+   php artisan route:cache
+   php artisan view:cache
+   ```
+
+### Serveur Web
+Le projet est compatible avec Apache/Nginx. Assurez-vous que le `DocumentRoot` pointe vers le dossier `public/`.
 
 ## Contribution
 
 1. Fork le projet
 2. Créer une branche feature (`git checkout -b feature/nouvelle-fonctionnalite`)
 3. Commit les changements (`git commit -am 'Ajout nouvelle fonctionnalité'`)
-4. Push la branche (`git push origin feature/nouvelle-fonctionnalite`)
+4. Push vers la branche (`git push origin feature/nouvelle-fonctionnalite`)
 5. Créer une Pull Request
+
+## Tests
+
+```bash
+# Exécuter tous les tests
+php artisan test
+
+# Tests avec couverture
+php artisan test --coverage
+```
+
+## Sécurité
+
+- Authentification sécurisée pour l'accès admin
+- Validation des données côté serveur
+- Protection CSRF sur tous les formulaires
+- Sanitisation des entrées utilisateur
 
 ## Licence
 
-Ce projet est sous licence MIT.
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ## Support
 
-Pour toute question ou problème, veuillez créer une issue sur le repository GitHub.
+Pour toute question ou problème :
+- Créer une issue sur GitHub
+- Contacter l'équipe de développement
+
+---
+
+**ALGODEVALUATION** - Enrichissons ensemble la base de données immobilière !
